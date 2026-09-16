@@ -1,0 +1,14 @@
+build_firmware/
+.pio/
+csdkconfig
+.tools/
+
+__pycache__/
+*.pyc
+.DS_Store
+
+# Generated, but committed on purpose so a clone builds without macOS system
+# fonts present. Regenerate with tools/gen_luts.py / tools/font_gen.py; both
+# record provenance in the header and refuse to emit a half-valid result.
+# src/lut_x3.h
+# src/gfx_font.h

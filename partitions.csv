@@ -1,0 +1,25 @@
+# Stock X3 partition table, reproduced EXACTLY from the live device.
+# Offsets/sizes were read off the running firmware this session:
+#   nvs      0x00009000     20480
+#   otadata  0x0000E000      8192
+#   app0     0x00010000   7798784   <- CrossPoint 1.6.0  (never written by this project)
+#   app1     0x00780000   7798784   <- this game
+#   spiffs   0x00EF0000   1048576
+#   coredump 0x00FF0000     65536
+# 7798784 == 0x770000.
+#
+# WHY THE TABLE IS UNCHANGED: writing a partition table is the one operation on
+# this device that can leave it unbootable in a way a bad app cannot. Keeping it
+# byte-identical to stock means the only recovery path ever needed here is
+# "flash a different 7.6 MB app slot", which esptool cannot get wrong.
+#
+# NOTE app1 previously held stock XT V6.3.15. That image is preserved in
+# ~/XteinkX3-backup/ (two physical disks) and is re-flashable at 0x780000.
+
+# Name,    Type, SubType,  Offset,   Size,     Flags
+nvs,       data, nvs,      0x9000,   0x5000,
+otadata,   data, ota,      0xE000,   0x2000,
+app0,      app,  ota_0,    0x10000,  0x770000,
+app1,      app,  ota_1,    0x780000, 0x770000,
+spiffs,    data, spiffs,   0xEF0000, 0x100000,
+coredump,  data, coredump, 0xFF0000, 0x10000,

@@ -1,0 +1,29 @@
+# SDK config for the X3 Blackjack build.
+# Deliberately minimal: no WiFi, no Bluetooth, no filesystem. That keeps the
+# image small and leaves the ~400 KB of C3 SRAM mostly free for the framebuffer.
+
+# --- flash: must match stock hardware (16MB, DIO) or the device won't boot ---
+CONFIG_ESPTOOLPY_FLASHSIZE_16MB=y
+CONFIG_ESPTOOLPY_FLASHMODE_DIO=y
+CONFIG_ESPTOOLPY_FLASHFREQ_80M=y
+
+# --- partitions come from partitions.csv, not the Kconfig defaults ---
+CONFIG_PARTITION_TABLE_CUSTOM=y
+CONFIG_PARTITION_TABLE_CUSTOM_FILENAME="partitions.csv"
+
+# --- radios off: nothing here talks to the network ---
+# (Arduino framework forces some wifi symbols; the app simply never calls them.)
+
+# --- memory ---
+CONFIG_ESP_DEFAULT_CPU_FREQ_MHZ_160=y
+CONFIG_FREERTOS_HZ=1000
+
+# A full "img" LUT sync is ~908 ms and we block on BUSY while it runs. Give the
+# task watchdog enough room that a slow refresh is never mistaken for a hang.
+CONFIG_ESP_TASK_WDT_TIMEOUT_S=30
+
+CONFIG_COMPILER_OPTIMIZATION_PERF=y
+
+# UART/USB-Serial-JTAG console so `pio device monitor` shows the panel + ADC
+# debug output during bring-up.
+CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG=y
